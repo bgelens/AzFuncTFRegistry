@@ -1,21 +1,30 @@
-# Azure Functions profile.ps1
-#
-# This profile.ps1 will get executed every "cold start" of your Function App.
-# "cold start" occurs when:
-#
-# * A Function App starts up for the very first time
-# * A Function App starts up after being de-allocated due to inactivity
-#
-# You can define helper functions, run commands, or specify environment variables
-# NOTE: any variables defined that are not environment variables will get reset after the first execution
+using namespace System.Net
 
-# Authenticate with Azure PowerShell using MSI.
-# Remove this if you are not planning on using MSI or Azure PowerShell.
-if ($env:MSI_SECRET -and (Get-Module -ListAvailable Az.Accounts)) {
-    Connect-AzAccount -Identity
+function Test-AuthenticationKey {
+  param (
+    $Headers
+  )
+
+  $authenticated = $true
+
+  if ($null -ne $env:authenticationKeys) {
+    $authenticationKeys = $env:authenticationKeys -split ';'
+    if ($Headers.ContainsKey('Authorization')) {
+      $authKey = ($Headers["Authorization"] -split ' ')[-1]
+      if (-not ($authKey -in $authenticationKeys)) {
+        $authenticated = $false
+      }
+    } else {
+      $authenticated = $false
+    }
+  }
+
+  if (-not $authenticated) {
+    Push-OutputBinding -Name Response -Value ([HttpResponseContext]@{
+      StatusCode = [HttpStatusCode]::Unauthorized
+      Body = ''
+    })
+  }
+
+  $authenticated
 }
-
-# Uncomment the next line to enable legacy AzureRm alias in Azure PowerShell.
-# Enable-AzureRmAlias
-
-# You can also define functions or aliases that can be referenced in any of your PowerShell functions.

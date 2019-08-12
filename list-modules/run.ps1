@@ -5,6 +5,10 @@ param(
   $TriggerMetadata
 )
 
+if (-not (Test-AuthenticationKey -Headers $Request.Headers)) {
+  return
+}
+
 $st = New-AzStorageContext -ConnectionString $env:AzureWebJobsStorage
 $table = (Get-AzStorageTable -Context $st.Context -Name $env:TFRegTableName).CloudTable
 

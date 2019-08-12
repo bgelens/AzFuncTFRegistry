@@ -18,6 +18,8 @@ The app makes use of Azure Table and Blob storage using the account associated w
 
 Pre-create the Table and Container (with access policy private) defined in the application settings.
 
+If you desire to use authentication keys with Terraform, add the application setting `authenticationKeys` and add values separated by `;`.
+
 ## Upload modules
 
 Upload modules to the storage account directly. First create a tar.gz archive
@@ -77,3 +79,5 @@ Add to your Terraform using:
   ```
 
 Run ```terraform init```
+
+> When using Authentication keys you need to [add a configuration file](https://www.terraform.io/docs/cloud/registry/using.html#configuration) for Terraform containing a valid key.

@@ -5,6 +5,10 @@ param(
   $TriggerMetadata
 )
 
+if (-not (Test-AuthenticationKey -Headers $Request.Headers)) {
+  return
+}
+
 $st = New-AzStorageContext -ConnectionString $env:AzureWebJobsStorage
 $table = (Get-AzStorageTable -Context $st.Context -Name $env:TFRegTableName).CloudTable
 
@@ -18,6 +22,7 @@ $modules = Get-TFModule -Table $table -Id $moduleId |
 if ($null -eq $modules) {
   Push-OutputBinding -Name Response -Value ([HttpResponseContext]@{
       StatusCode = [HttpStatusCode]::NotFound
+      Body = '{"errors":["Not Found"]}'
     })
 } else {
   # build return json
