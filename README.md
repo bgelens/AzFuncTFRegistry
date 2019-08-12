@@ -1,6 +1,6 @@
 # Azure Function App: Terraform Registry
 
-An Azure Function App written in PowerShell to host a Terraform Registry.
+An Azure Function App written in PowerShell to host a Terraform Registry ([API Documentation](https://www.terraform.io/docs/registry/api.html)).
 
 The app makes use of Azure Table and Blob storage using the account associated with the function app. Make sure the app is published using application settings as defined in this `local.settings.json` example:
 
