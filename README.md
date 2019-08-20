@@ -44,7 +44,7 @@ Set-AzStorageBlobContent -Container modules -Context $st.Context -File "./mymodu
 
 Once this is done, the `ingest-modules` function is triggered by a blob trigger which will add the module to the registry table (a module with the same version as one already in the registry will overwrite the module link to the new file).
 
-## Quering the registry
+## Querying the registry
 
 Use the PowerShell module [TerraformRegistry](https://www.powershellgallery.com/packages/TerraformRegistry) to get data from the registry.
 
@@ -55,7 +55,7 @@ Get-TerraformModule
 
 Note that the first time can be a little slow as the Function App needs to download the Az modules using DependencyManagement.
 
-You can remove the dependency on DependencyManagement by using `Save-Module Az.Storage -Path ./Modules` and disabling the setting in `host.json`.
+You can remove the dependency on DependencyManagement by using `Save-Module Az.Storage -Path ./Modules` and disabling the setting in `host.json`. This will speed up cold start significantly.
 
 ## Using the registry in Terraform
 

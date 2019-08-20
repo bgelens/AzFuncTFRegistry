@@ -28,12 +28,12 @@ if ($modules.Version -contains $TriggerMetadata.Metadata['version']) {
     $_.Version -eq $TriggerMetadata.Metadata['version']
   }
 
-  $removeBlob = ($replaceModule.Link -split '/')[-1]
-  try {
-    $null = Remove-AzStorageBlob -Context $stContext -Container $env:ModuleContainer -Blob $removeBlob -Force
-  } catch {
-    Write-Error -Message "Failed to delete $removeBlob" -ErrorAction Continue
-  }
+  #$removeBlob = ($replaceModule.Link -split '/')[-1]
+  #try {
+  #  $null = Remove-AzStorageBlob -Context $stContext -Container $env:ModuleContainer -Blob $removeBlob -Force
+  #} catch {
+  #  Write-Error -Message "Failed to delete $removeBlob" -ErrorAction Continue
+  #}
 
   $replaceModule.Link = $TriggerMetadata.Uri
   $replaceModule.Published_At = $TriggerMetadata.Properties.Created
